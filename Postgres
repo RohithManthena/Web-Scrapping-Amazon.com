@@ -1,0 +1,34 @@
+
+CREATE DATABASE stores
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1;
+
+
+CREATE SCHEMA str
+    AUTHORIZATION postgres;
+
+
+create table str.stores (
+storeId int,
+deptId int,
+date date,
+weeklySales numeric,
+isHoliday boolean	
+)
+
+#error in importing 
+#changed the binary path to C:\Program Files\PostgreSQL\13\bin
+
+imported with inbuilt import funciton
+
+with totalsales 
+as 
+(
+select storeid, deptid, sum(weeklysales) as totalsales, PERCENT_RANK() over(partition by storeid order by sum(weeklysales) Desc)  as ranking from str.stores where extract(year from date) = 2012 group by storeid, deptid  
+)
+select count(*) from totalsales where ranking<0.21
+
+
+
